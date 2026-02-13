@@ -32,14 +32,18 @@ function renderBooks(filter) {
   booksWrapper.innerHTML = booksHtml;
 }    
 
-function ratingsHtml(rating) {
+function ratingsHtml() {
   let ratingHtml ="";
   for (let i = 0; i < Math.floor(rating); ++i) {
     ratingHtml += '<i class="fas fa-star"></i>\n';
   }
   if (!Number.isInteger(rating)) {
    ratingHtml += '<i class="fas fa-star-half-alt"></i>\n'; 
+   
   }
+   for (let i = 0; i <= rating ; ++1) {
+    ratingHtml += '<i class="far fa-star"></i'>;
+   }
   return ratingHtml;
 }
 
