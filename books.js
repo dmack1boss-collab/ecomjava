@@ -1,34 +1,53 @@
-function renderBooks() {
-  const booksWrapper = document.querySelector('books');
-
+function renderBooks(filter) {
+  const booksWrapper = document.querySelector('.books');
   const books = getBooks();
 
-  const booksHtml = books.map((book) => {
-    return `<div class="book">
-      <figure class="book__img--wrapper">
-        <img class="book__img" src="${book.url}" alt="">
-      </figure>
-      <div class="book__title">
-        ${book.title}
-      </div>
-      <div class="book__ratings">
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star-half-alt"></i>
-      </div>
-      <div class="book__price">
-        <span class="book__price--normal">$$${book.originalPrice}</span> $$${book.salePrice}
-      </div>
-    </div>`
-  }).join("");
+  if (filter === 'low_to_high') {
+    books.sort((a, b) => a.originalPrice - b.originalPrice);
+  } else if (filter === 'high_to_low') {
+    books.sort((a, b) => b.originalPrice - a.originalPrice);
+  } else if (filter === 'rating') {
+    books.sort((a, b) => b.rating - a.rating);
+  }
+
+  const booksHtml = books
+    .map((book) => {
+      return `<div class="book">
+        <figure class="book__img--wrapper">
+          <img class="book__img" src="${book.url}" alt="">
+        </figure>
+        <div class="book__title">
+          ${book.title}
+        </div>
+        <div class="book__ratings">
+          ${ratingsHtml(book.rating)}
+        </div>
+        <div class="book__price">
+          <span>$${book.originalPrice.toFixed(2)}</span>
+        </div>
+      </div>`
+    })
+    .join("");                          
 
   booksWrapper.innerHTML = booksHtml;
-  console.log(booksHtml);
+}    
+
+function ratingsHtml(rating) {
+  let ratingHtml ="";
+  for (let i = 0; i < Math.floor(rating); ++i) {
+    ratingHtml += '<i class="fas fa-star"></i>\n';
+  }
+  if (!Number.isInteger(rating)) {
+   ratingHtml += '<i class="fas fa-star-half-alt"></i>\n'; 
+  }
+  return ratingHtml;
 }
 
-setTimeout(() => {
+function filterBooks(event) {           
+  renderBooks(event.target.value);
+}
+
+setTimeout(() => {                     
   renderBooks();
 });
 
